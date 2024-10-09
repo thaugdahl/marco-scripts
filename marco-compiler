@@ -1,4 +1,4 @@
-source /home/tor/Scripts/marco/marco-config
+source $HOME/Scripts/marco/marco-config
 
 LIT_PATH=$(which lit)
 
