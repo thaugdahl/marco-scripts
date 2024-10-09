@@ -1,0 +1,10 @@
+source /home/tor/Scripts/marco/marco-config
+
+cmake \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_PREFIX=${MARCO_RUNTIME_INSTALL_PATH} \
+  -DSUNDIALS_PATH=${SUNDIALS_INSTALL_PATH} \
+  -DLLVM_PATH=${MARCO_LLVM_INSTALL_PATH} \
+  -S . -B build
+
+# vim: set ft=sh:

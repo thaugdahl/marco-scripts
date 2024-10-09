@@ -1,0 +1,36 @@
+###########################
+#   MARCO CONFIGURATION   #
+###########################
+
+if [ -z "$MARCO_PROJECT_ROOT" ]; then
+    echo "MARCO_PROJECT_ROOT was not set!"
+else
+
+    export MARCO_LLVM_PROJECT_ROOT=$MARCO_PROJECT_ROOT/source/llvm-project
+    export MARCO_LLVM_INSTALL_PATH=$MARCO_PROJECT_ROOT/install/llvm-project
+    export MARCO_INSTALL_PATH=$MARCO_PROJECT_ROOT/install/marco
+    export MARCO_RUNTIME_INSTALL_PATH=$MARCO_PROJECT_ROOT/install/marco-runtime
+
+    # Find sundials libraries
+    SUNDIALS_LIB_PATH=$(dirname $(readlink -f $(ldconfig -p | grep -i sundials.ida.so[^.] | awk '{print $4}')))
+
+    if [ -z $SUNDIALS_LIB_PATH ]; then
+        SUNDIALS_LIB_PATH=${SUNDIALS_EXT_LIB_PATH}
+    fi
+
+    if [ ! -d $SUNDIALS_LIB_PATH ]; then
+        echo "Couldn't find sundials"
+    else
+        export SUNDIALS_LIB_PATH
+    fi
+
+
+    if [ "x$MARCO_EXPORT_VARS" == "xyes" ]; then
+        export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$MARCO_INSTALL_PATH/lib:${MARCO_RUNTIME_INSTALL_PATH}/lib
+        export PATH=${PATH}:$MARCO_INSTALL_PATH/bin
+    fi
+
+fi
+
+# vim: set ft=sh:
+

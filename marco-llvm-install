@@ -1,0 +1,30 @@
+source /home/tor/Scripts/marco/marco-config
+
+cd ${MARCO_LLVM_PROJECT_ROOT}/ && mkdir -p ${MARCO_LLVM_PROJECT_ROOT}/build
+
+cd ${MARCO_LLVM_PROJECT_ROOT}/build
+
+
+CURRENT_BRANCH=$(git branch --show-current)
+
+if [ "$CURRENT_BRANCH" != "marco-llvm" ]; then
+    echo "The current branch is not \`marco-llvm\`. Please change it and " \
+        "rerun this script"
+    exit
+fi
+
+cmake \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_PREFIX=${MARCO_LLVM_INSTALL_PATH} \
+  -DLLVM_PARALLEL_COMPILE_JOBS=16 \
+  -DLLVM_PARALLEL_LINK_JOBS=2 \
+  -DLLVM_USE_LINKER=mold \
+  -DLLVM_TARGETS_TO_BUILD="host" \
+  -DLLVM_INSTALL_UTILS=True \
+  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;mlir;openmp" \
+  -G "Ninja" \
+  ../llvm
+
+cmake --build . --target install
+
+# vim: set ft=sh:

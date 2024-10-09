@@ -1,0 +1,21 @@
+source /home/tor/Scripts/marco/marco-config
+
+LIT_PATH=$(which lit)
+
+BUILDDIR=$MARCO_PROJECT_ROOT/source/marco/build
+mkdir -p $BUILDDIR && cd $BUILDDIR
+
+OLDPWD=$(pwd)
+
+cmake \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_INSTALL_PREFIX=${MARCO_INSTALL_PATH} \
+  -DLLVM_PATH=${LLVM_INSTALL_PATH} \
+  -DMARCORuntime_DIR=${RUNTIME_INSTALL_PATH}/lib/cmake/MARCORuntime \
+  -DLLVM_EXTERNAL_LIT=${LIT_PATH} \
+  -G "Ninja" \
+  ..
+
+cd $OLDPWD
+
+# vim: set ft=sh:
