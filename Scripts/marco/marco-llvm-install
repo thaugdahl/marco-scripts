@@ -1,4 +1,6 @@
-source $HOME/Scripts/marco/marco-config
+#!/bin/bash
+
+source $MARCO_SETUP_SCRIPTS_DIR/marco-config
 
 cd ${MARCO_LLVM_PROJECT_ROOT}/ && mkdir -p ${MARCO_LLVM_PROJECT_ROOT}/build
 

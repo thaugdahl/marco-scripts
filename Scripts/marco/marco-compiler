@@ -1,21 +1,23 @@
-source $HOME/Scripts/marco/marco-config
+#!/bin/bash
+
+source $MARCO_SETUP_SCRIPTS_DIR/marco-config
 
 LIT_PATH=$(which lit)
 
 BUILDDIR=$MARCO_PROJECT_ROOT/source/marco/build
 mkdir -p $BUILDDIR && cd $BUILDDIR
 
-OLDPWD=$(pwd)
+cd $BUILDDIR
 
 cmake \
-  -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX=${MARCO_INSTALL_PATH} \
-  -DLLVM_PATH=${LLVM_INSTALL_PATH} \
-  -DMARCORuntime_DIR=${RUNTIME_INSTALL_PATH}/lib/cmake/MARCORuntime \
+  -DLLVM_PATH=${MARCO_LLVM_INSTALL_PATH} \
+  -DMARCORuntime_DIR=${MARCO_RUNTIME_INSTALL_PATH}/lib/cmake/MARCORuntime \
   -DLLVM_EXTERNAL_LIT=${LIT_PATH} \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=YES \
   -G "Ninja" \
-  ..
-
-cd $OLDPWD
+  -S $MARCO_PROJECT_ROOT/source/marco \
+  -B $BUILDDIR
 
 # vim: set ft=sh:

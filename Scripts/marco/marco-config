@@ -2,6 +2,23 @@
 #   MARCO CONFIGURATION   #
 ###########################
 
+find_sundials() {
+    LDCONFIG_OUTPUT=$(ldconfig -p | grep -i sundials.ida.so[^.] | awk '{print $4}')
+
+    if [ -z "$LDCONFIG_OUTPUT" ]; then
+        return
+    fi
+
+    REAL_PATH=$(readlink -f $LDCONFIG_OUTPUT)
+    REAL_PATH_DIRNAME=$(dirname ${REAL_PATH})
+
+    if [ ! -d $REAL_PATH_DIRNAME/lib ]; then
+        return
+    fi
+
+    echo $REAL_PATH_DIRNAME
+}
+
 if [ -z "$MARCO_PROJECT_ROOT" ]; then
     echo "MARCO_PROJECT_ROOT was not set!"
 else
@@ -12,21 +29,22 @@ else
     export MARCO_RUNTIME_INSTALL_PATH=$MARCO_PROJECT_ROOT/install/marco-runtime
 
     # Find sundials libraries
-    SUNDIALS_LIB_PATH=$(dirname $(readlink -f $(ldconfig -p | grep -i sundials.ida.so[^.] | awk '{print $4}')))
+    # SUNDIALS_LIB_PATH=$(dirname $(readlink -f $(ldconfig -p | grep -i sundials.ida.so[^.] | awk '{print $4}') 2>/dev/null))
+    SUNDIALS_PATH=$(find_sundials)
 
-    if [ -z $SUNDIALS_LIB_PATH ]; then
-        SUNDIALS_LIB_PATH=${SUNDIALS_EXT_LIB_PATH}
+    if [ -z $SUNDIALS_PATH ]; then
+        SUNDIALS_PATH=${SUNDIALS_EXT_PATH}
     fi
 
-    if [ ! -d $SUNDIALS_LIB_PATH ]; then
+    if [ ! -d $SUNDIALS_PATH ]; then
         echo "Couldn't find sundials"
     else
-        export SUNDIALS_LIB_PATH
+        export SUNDIALS_PATH
     fi
 
 
     if [ "x$MARCO_EXPORT_VARS" == "xyes" ]; then
-        export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$MARCO_INSTALL_PATH/lib:${MARCO_RUNTIME_INSTALL_PATH}/lib
+        export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$MARCO_INSTALL_PATH/lib:${MARCO_RUNTIME_INSTALL_PATH}/lib:$MARCO_LLVM_INSTALL_PATH/lib
         export PATH=${PATH}:$MARCO_INSTALL_PATH/bin
     fi
 
