@@ -9,7 +9,7 @@ find_sundials() {
         return
     fi
 
-    REAL_PATH=$(readlink -f $LDCONFIG_OUTPUT)
+    REAL_PATH=$(readlink -f $LDCONFIG_OUTPUT)
     REAL_PATH_DIRNAME=$(dirname ${REAL_PATH})
 
     if [ ! -d $REAL_PATH_DIRNAME/lib ]; then
@@ -29,16 +29,13 @@ else
     export MARCO_RUNTIME_INSTALL_PATH=$MARCO_PROJECT_ROOT/install/marco-runtime
 
     # Find sundials libraries
-    # SUNDIALS_LIB_PATH=$(dirname $(readlink -f $(ldconfig -p | grep -i sundials.ida.so[^.] | awk '{print $4}') 2>/dev/null))
     SUNDIALS_PATH=$(find_sundials)
 
     if [ -z $SUNDIALS_PATH ]; then
         SUNDIALS_PATH=${SUNDIALS_EXT_PATH}
     fi
 
-    if [ ! -d $SUNDIALS_PATH ]; then
-        echo "Couldn't find sundials"
-    else
+    if [ -d $SUNDIALS_PATH ]; then
         export SUNDIALS_PATH
     fi
 
