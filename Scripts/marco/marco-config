@@ -35,7 +35,7 @@ else
         SUNDIALS_PATH=${SUNDIALS_EXT_PATH}
     fi
 
-    if [ -d $SUNDIALS_PATH ]; then
+    if ! [ -z "$SUNDIALS_PATH" ] && [ -d "$SUNDIALS_PATH" ]; then
         export SUNDIALS_PATH
     fi
 

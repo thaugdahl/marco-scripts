@@ -11,7 +11,7 @@ LIBFLAGS+= -L$(SUNDIALS_PATH)/lib
 endif
 
 test: test.mo
-	marco --omc-bypass $(LIBFLAGS) $< -o $@
+	marco --omc-bypass --solver=euler-forward $(LIBFLAGS) $< -o $@
 
 
 clean:
