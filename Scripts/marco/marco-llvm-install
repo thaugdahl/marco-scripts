@@ -6,6 +6,11 @@ cd ${MARCO_LLVM_PROJECT_ROOT}/ && mkdir -p ${MARCO_LLVM_PROJECT_ROOT}/build
 
 cd ${MARCO_LLVM_PROJECT_ROOT}/build
 
+if [ $# -lt 1 ]; then
+    MARCO_BUILD_TYPE=Release
+else
+    MARCO_BUILD_TYPE=$1
+fi
 
 CURRENT_BRANCH=$(git branch --show-current)
 
@@ -16,7 +21,7 @@ if [ "$CURRENT_BRANCH" != "marco-llvm" ]; then
 fi
 
 cmake \
-  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_BUILD_TYPE=${MARCO_BUILD_TYPE} \
   -DCMAKE_INSTALL_PREFIX=${MARCO_LLVM_INSTALL_PATH} \
   -DLLVM_PARALLEL_COMPILE_JOBS=16 \
   -DLLVM_PARALLEL_LINK_JOBS=2 \
