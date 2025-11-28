@@ -3,8 +3,7 @@ module attributes {dlti.dl_spec = #dlti.dl_spec<"dlti.endianness" = "little", "d
   memref.global "private" constant @__constant_15x15xf64 : memref<15x15xf64> = dense<0.000000e+00> {alignment = 64 : i64}
   memref.global "private" constant @__constant_15x7xf64 : memref<15x7xf64> = dense<0.000000e+00> {alignment = 64 : i64}
   memref.global "private" @time : memref<f64> = uninitialized
-  memref.global "private" @var : memref<15x15x5xf64> = uninitialized
-  memref.global "private" @var_0 : memref<15x15x5xf64> = uninitialized
+  memref.global "private" @var : memref<15x15x5xf64> = uninitialized memref.global "private" @var_0 : memref<15x15x5xf64> = uninitialized
   memref.global "private" @var_1 : memref<15x15x5xf64> = uninitialized
   memref.global "private" @var_2 : memref<15x15x5xf64> = uninitialized
   memref.global "private" @var_3 : memref<15x15x5xf64> = uninitialized
@@ -2248,10 +2247,10 @@ module attributes {dlti.dl_spec = #dlti.dl_spec<"dlti.endianness" = "little", "d
     return %9 : f64
   }
   runtime.variable_getters [@var_getter_0, @var_getter_1, @var_getter_2, @var_getter_3, @var_getter_4, @var_getter_5, @var_getter_6, @var_getter_7, @var_getter_8, @var_getter_9, @var_getter_10, @var_getter_11, @var_getter_12, @var_getter_13, @var_getter_14, @var_getter_15, @var_getter_16, @var_getter_17, @var_getter_18, @var_getter_19, @var_getter_20, @var_getter_21, @var_getter_22, @var_getter_23, @var_getter_24, @var_getter_25, @var_getter_26]
-  func.func @updateNonStateVariables() {
-    call @ThermalChipSimpleBoundary_dynamic() : () -> ()
-    return
-  }
+  // func.func @updateNonStateVariables() {
+  //   call @ThermalChipSimpleBoundary_dynamic() : () -> ()
+  //   return
+  // }
   func.func @updateStateVariables(%arg0: f64) {
     %0 = memref.get_global @timeStep : memref<f64>
     memref.store %arg0, %0[] : memref<f64>
@@ -2423,6 +2422,14 @@ module attributes {dlti.dl_spec = #dlti.dl_spec<"dlti.endianness" = "little", "d
     scf.if %true {
       memref.dealloc %alloc_16 : memref<15x15x5xf64>
     }
+    return
+  }
+
+  func.func @main() {
+    call @init() : () -> ()
+    call @ThermalChipSimpleBoundary_ic() : () -> ()
+    call @ThermalChipSimpleBoundary_dynamic() : () -> ()
+    call @ThermalChipSimpleBoundary_dynamic() : () -> ()
     return
   }
   func.func @deinit() {

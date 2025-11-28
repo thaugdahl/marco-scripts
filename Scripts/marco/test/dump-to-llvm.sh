@@ -1,0 +1,1 @@
+modelica-opt --pass-pipeline='builtin.module(lower-affine,convert-scf-to-cf,convert-runtime-model-metadata,convert-bmodelica-to-mlir-core,convert-all-to-llvm,convert-to-llvm,heap-functions-replacement,reconcile-unrealized-casts,canonicalize,llvm-legalize-for-export)' thermalchip.mlir > thermalchip.ll
