@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/home/tor/Dev/PhD/DRComp/llvm-install/bin/opt $@
+/home/tor/Dev/PhD/DRComp/llvm-project/build/bin/opt $@
