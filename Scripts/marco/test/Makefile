@@ -2,6 +2,8 @@
 
 LIBFLAGS:=-L$(MARCO_RUNTIME_INSTALL_PATH)/lib
 
+MOOPT:=/home/tor/Dev/marco/source/marco/build/bin/modelica-opt
+
 # ifndef SUNDIALS_PATH
 # error 2
 # endif
@@ -18,28 +20,28 @@ debug: test.mo FORCE
 	gdb --args marco --omc-bypass --solver=euler-forward $(LIBFLAGS) test.mo -o $@
 
 run-tc:
-	modelica-opt --pass-pipeline='builtin.module(data-recomputation{dr-test-diagnostics})' thermalchip.mlir
+	${MOOPT} --pass-pipeline='builtin.module(data-recomputation{dr-test-diagnostics})' thermalchip.mlir
 
 debug-tc:
-	gdb -x commands.gdb --args modelica-opt --pass-pipeline='builtin.module(data-recomputation{})' thermalchip.mlir
+	gdb -x commands.gdb --args ${MOOPT} --pass-pipeline='builtin.module(data-recomputation{})' thermalchip.mlir
 
 run-test:
-	modelica-opt --pass-pipeline='builtin.module(data-recomputation{})' test.mlir
+	${MOOPT} --pass-pipeline='builtin.module(data-recomputation{})' test.mlir
 
 debug-test:
-	gdb -x commands.gdb --args modelica-opt --pass-pipeline='builtin.module(data-recomputation{})' test.mlir
+	gdb -x commands.gdb --args ${MOOPT} --pass-pipeline='builtin.module(data-recomputation{})' test.mlir
 
 run-forwarded:
-	modelica-opt --pass-pipeline='builtin.module(data-recomputation{})' forwarded-reinterpreted-memref.mlir
+	${MOOPT} --pass-pipeline='builtin.module(data-recomputation{})' forwarded-reinterpreted-memref.mlir
 
 debug-forwarded:
-	gdb -x commands.gdb --args modelica-opt --pass-pipeline='builtin.module(data-recomputation{})' forwarded-reinterpreted-memref.mlir
+	gdb -x commands.gdb --args ${MOOPT} --pass-pipeline='builtin.module(data-recomputation{})' forwarded-reinterpreted-memref.mlir
 
 run-methanol:
-	modelica-opt --pass-pipeline='builtin.module(data-recomputation{})' methanol.mlir
+	${MOOPT} --pass-pipeline='builtin.module(data-recomputation{})' methanol.mlir
 
 debug-methanol:
-	gdb -x commands.gdb --args modelica-opt --pass-pipeline='builtin.module(data-recomputation{})' methanol.mlir
+	gdb -x commands.gdb --args ${MOOPT} --pass-pipeline='builtin.module(data-recomputation{})' methanol.mlir
 
 clean:
 	rm test
